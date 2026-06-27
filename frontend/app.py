@@ -6,7 +6,8 @@ import requests
 # python -m streamlit run frontend/app.py
 st.set_page_config(page_title="Device KPI Dashboard", layout="wide")
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 [data-testid="stSidebar"] {
     background-color: #111827;
@@ -44,8 +45,9 @@ st.markdown("""
     font-size: 34px !important;
 }
 </style>
-""", unsafe_allow_html=True)
-
+""",
+    unsafe_allow_html=True,
+)
 
 
 st.markdown("""
@@ -70,21 +72,16 @@ with st.sidebar:
     st.divider()
 
     status_filter = st.multiselect(
-        "Device Status",
-        options=df["status"].unique(),
-        default=df["status"].unique()
+        "Device Status", options=df["status"].unique(), default=df["status"].unique()
     )
 
     pipeline_filter = st.multiselect(
         "Pipeline Status",
         options=df["pipeline_status"].unique(),
-        default=df["pipeline_status"].unique()
+        default=df["pipeline_status"].unique(),
     )
 
-    chart_selection = st.selectbox(
-        "Select chart type",
-        ("Bar", "Area")
-    )
+    chart_selection = st.selectbox("Select chart type", ("Bar", "Area"))
 
     st.divider()
 
@@ -93,8 +90,7 @@ with st.sidebar:
 
 
 df = df[
-    (df["status"].isin(status_filter)) &
-    (df["pipeline_status"].isin(pipeline_filter))
+    (df["status"].isin(status_filter)) & (df["pipeline_status"].isin(pipeline_filter))
 ]
 
 total_devices = len(df)
@@ -134,9 +130,9 @@ with kpi_cols[3]:
         st.bar_chart(mini_data, height=120)
 
 problems = df[
-    (df["status"] == "Offline") |
-    (df["status"] == "Maintenance") |
-    (df["last_test_result"] == "Fail")
+    (df["status"] == "Offline")
+    | (df["status"] == "Maintenance")
+    | (df["last_test_result"] == "Fail")
 ]
 
 st.subheader("Device Overview")
@@ -153,10 +149,7 @@ status_counts = df["status"].value_counts().reset_index()
 status_counts.columns = ["status", "count"]
 
 fig_status = px.pie(
-    status_counts,
-    names="status",
-    values="count",
-    title="Device Status Distribution"
+    status_counts, names="status", values="count", title="Device Status Distribution"
 )
 with col5:
     with st.container(border=True):
@@ -165,12 +158,7 @@ with col5:
 test_counts = df["last_test_result"].value_counts().reset_index()
 test_counts.columns = ["test_result", "count"]
 
-fig_tests = px.bar(
-    test_counts,
-    x="test_result",
-    y="count",
-    title="Test Results"
-)
+fig_tests = px.bar(test_counts, x="test_result", y="count", title="Test Results")
 with col6:
     with st.container(border=True):
         st.plotly_chart(fig_tests, use_container_width=True)
@@ -180,7 +168,7 @@ fig_duration = px.bar(
     x="device_id",
     y="test_duration_sec",
     color="last_test_result",
-    title="Test Duration per Device"
+    title="Test Duration per Device",
 )
 
 with st.container(border=True):
