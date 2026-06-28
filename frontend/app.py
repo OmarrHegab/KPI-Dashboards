@@ -5,7 +5,8 @@ import streamlit as st
 
 st.set_page_config(page_title="Device KPI Dashboard", layout="wide")
 
-st.markdown("""
+st.markdown(
+    """
 <style>
 .stApp {
     background: linear-gradient(120deg, #060b12 0%, #101820 100%);
@@ -148,13 +149,16 @@ hr {
     overflow: hidden;
 }
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
 
 API_URL = "http://backend:8000/devices"
 
 response = requests.get(API_URL)
 data = response.json()
 df = pd.DataFrame(data)
+
 
 def render_status_badge(value):
     styles = {
@@ -168,7 +172,9 @@ def render_status_badge(value):
         "Warning": "background:#4a2506;color:#fb923c;border:1px solid #9a3412;",
     }
 
-    style = styles.get(str(value), "background:#111827;color:#d1d5db;border:1px solid #374151;")
+    style = styles.get(
+        str(value), "background:#111827;color:#d1d5db;border:1px solid #374151;"
+    )
     return f'<span style="{style} padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px;">{value}</span>'
 
 
@@ -216,7 +222,8 @@ def render_device_table(table_df):
 
 
 with st.sidebar:
-    st.markdown("""
+    st.markdown(
+        """
     <div class="sidebar-logo">
         <span>▰</span> Streamlit +
     </div>
@@ -226,7 +233,9 @@ with st.sidebar:
     </div>
 
     <div class="sidebar-section">⚙️ Settings</div>
-    """, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
     status_filter = st.multiselect(
         "Device Status",
@@ -245,8 +254,7 @@ with st.sidebar:
     st.caption("🖥️ Frontend: Streamlit")
 
 df = df[
-    (df["status"].isin(status_filter))
-    & (df["pipeline_status"].isin(pipeline_filter))
+    (df["status"].isin(status_filter)) & (df["pipeline_status"].isin(pipeline_filter))
 ]
 
 total_devices = len(df)
@@ -254,12 +262,16 @@ online_devices = (df["status"] == "Online").sum()
 pass_rate = (df["last_test_result"] == "Pass").mean() * 100
 pipeline_success_rate = (df["pipeline_status"] == "Success").mean() * 100
 
-st.markdown("""
+st.markdown(
+    """
 <div class="main-header">
     <h1>Device KPI Overview</h1>
     <p>Automated KPI monitoring for measurement devices in a DevOps / Build Engineering environment</p>
 </div>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True,
+)
+
 
 def mini_bar_chart(series, color):
     chart_df = series.reset_index()
@@ -285,6 +297,7 @@ def mini_bar_chart(series, color):
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
 
 kpi_cols = st.columns(4)
 
