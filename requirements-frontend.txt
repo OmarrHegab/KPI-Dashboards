@@ -2,5 +2,5 @@
 # Pinned for reproducible builds; bump deliberately (see Dependabot config).
 streamlit==1.55.0
 plotly==6.8.0
-pandas==2.3.3
+pandas==3.0.4
 requests==2.32.5
