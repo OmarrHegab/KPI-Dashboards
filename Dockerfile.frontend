@@ -1,12 +1,31 @@
-FROM python:3.11-slim
+# Pinned to a patch version for reproducibility. For production, pin by digest
+# (FROM python:3.11.9-slim@sha256:...) and let Dependabot keep it fresh.
+FROM python:3.11.9-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Refresh OS packages to pull in security fixes available since the base build.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
+# Create an unprivileged user to run the service (never run as root).
+RUN groupadd --system app && useradd --system --gid app --home-dir /app app
+
+# Install only the frontend's dependencies (cached layer).
+COPY requirements-frontend.txt .
+RUN pip install --no-cache-dir -r requirements-frontend.txt
 
 COPY frontend ./frontend
 
+RUN chown -R app:app /app
+USER app
+
 EXPOSE 8501
+
+# Streamlit ships its own health endpoint.
+HEALTHCHECK --interval=15s --timeout=3s --start-period=15s --retries=5 \
+    CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8501/_stcore/health').status==200 else 1)"
 
 CMD ["streamlit", "run", "frontend/app.py", "--server.address=0.0.0.0", "--server.port=8501"]

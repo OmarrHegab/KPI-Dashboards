@@ -1,6 +1,5 @@
-pandas
-streamlit
-plotly
-requests
-fastapi
-uvicorn
+# Convenience aggregate for a single local install of the full app.
+# CI and the Docker images install the per-service files instead, so each
+# container ships only the dependencies it actually needs.
+-r requirements-backend.txt
+-r requirements-frontend.txt

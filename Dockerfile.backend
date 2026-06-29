@@ -1,13 +1,32 @@
-FROM python:3.11-slim
+# Pinned to a patch version for reproducibility. For production, pin by digest
+# (FROM python:3.11.9-slim@sha256:...) and let Dependabot keep it fresh.
+FROM python:3.11.9-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Refresh OS packages to pull in security fixes available since the base build.
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
+# Create an unprivileged user to run the service (never run as root).
+RUN groupadd --system app && useradd --system --gid app --home-dir /app app
+
+# Install only the backend's dependencies (cached layer).
+COPY requirements-backend.txt .
+RUN pip install --no-cache-dir -r requirements-backend.txt
 
 COPY backend ./backend
 COPY data ./data
 
+RUN chown -R app:app /app
+USER app
+
 EXPOSE 8000
+
+# Liveness probe using only the stdlib (no curl in the slim image).
+HEALTHCHECK --interval=15s --timeout=3s --start-period=10s --retries=5 \
+    CMD python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"
 
 CMD ["uvicorn", "backend.api:app", "--host", "0.0.0.0", "--port", "8000"]

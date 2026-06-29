@@ -1,0 +1,133 @@
+.stApp {
+    background: linear-gradient(120deg, #060b12 0%, #101820 100%);
+    color: white;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #020204;
+    border-right: 2px solid #1f2937;
+}
+
+[data-testid="stSidebar"] * {
+    color: white;
+}
+
+/* Multiselect selected chips */
+span[data-baseweb="tag"] {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #374151 !important;
+}
+
+span[data-baseweb="tag"] span {
+    color: #f3f4f6 !important;
+}
+
+.block-container {
+    padding-top: 3.5rem;
+    max-width: 1350px;
+}
+
+.custom-table-wrapper {
+    border: 1px solid #263241;
+    border-radius: 14px;
+    overflow-x: auto;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    background: linear-gradient(145deg, #101722, #0b111a);
+}
+
+.custom-table-wrapper table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #e5e7eb;
+    font-size: 15px;
+    margin-bottom: 0 !important;
+}
+
+.custom-table-wrapper thead tr {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.custom-table-wrapper th {
+    color: #cbd5e1;
+    font-weight: 600;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid #263241;
+}
+
+.custom-table-wrapper td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #263241;
+    color: #f3f4f6;
+}
+
+.custom-table-wrapper tbody tr:last-child td {
+    border-bottom: none !important;
+}
+
+.custom-table-wrapper tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-logo {
+    font-size: 30px;
+    font-weight: 800;
+    margin-bottom: 3rem;
+}
+
+.sidebar-logo span {
+    color: #ff4b4b;
+}
+
+.sidebar-title h1 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 2.5rem;
+}
+
+.sidebar-section {
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.main-header h1 {
+    font-size: 36px;
+    font-weight: 850;
+    margin-bottom: 0.25rem;
+}
+
+.main-header p {
+    color: #c3cbd6;
+    font-size: 17px;
+    margin-bottom: 2rem;
+}
+
+[data-testid="stMetricValue"] {
+    font-size: 38px !important;
+    font-weight: 800 !important;
+}
+
+[data-testid="stMetricLabel"] {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+}
+
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: linear-gradient(145deg, #101722, #0b111a);
+    border: 1px solid #263241;
+    border-radius: 16px;
+    padding: 10px;
+}
+
+hr {
+    border-color: #273242;
+}
+
+.stDataFrame {
+    border-radius: 14px;
+    overflow: hidden;
+}

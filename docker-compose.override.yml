@@ -1,0 +1,12 @@
+# Local development overrides, auto-merged by `docker compose up`.
+# Bind-mounts the source so edits hot-reload without a rebuild. The base
+# docker-compose.yml stays a faithful production definition (no bind-mounts).
+services:
+  frontend:
+    volumes:
+      - ./frontend:/app/frontend
+
+  backend:
+    volumes:
+      - ./backend:/app/backend
+      - ./data:/app/data

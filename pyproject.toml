@@ -1,0 +1,46 @@
+[project]
+name = "device-kpi-dashboard"
+version = "2.0.0"
+description = "Dockerized Streamlit + FastAPI dashboard for monitoring measurement-device KPIs."
+requires-python = ">=3.11"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["data"]
+
+[tool.ruff.lint]
+# E/W: pycodestyle, F: pyflakes, I: isort, B: bugbear, UP: pyupgrade, C4: comprehensions.
+select = ["E", "W", "F", "I", "B", "UP", "C4"]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests favour readable, aligned fixture tables over strict line length.
+"tests/conftest.py" = ["E501"]
+
+[tool.ruff.lint.flake8-bugbear]
+# FastAPI's dependency markers are designed to be called in argument defaults.
+extend-immutable-calls = [
+    "fastapi.Query",
+    "fastapi.Path",
+    "fastapi.Body",
+    "fastapi.Depends",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--strict-markers -ra"
+filterwarnings = [
+    # Environment-version noise from Starlette's TestClient; not our code.
+    "ignore:Using `httpx` with `starlette.testclient`:Warning",
+]
+
+[tool.coverage.run]
+# app.py is UI glue exercised by the CI integration smoke test, not pytest.
+source = ["backend", "frontend"]
+omit = ["scripts/*", "tests/*", "frontend/app.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 85

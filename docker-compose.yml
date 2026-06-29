@@ -1,18 +1,54 @@
+# Production-faithful stack. Local hot-reload lives in docker-compose.override.yml
+# (auto-merged by `docker compose up`); run `docker compose -f docker-compose.yml up`
+# to use this file alone.
 services:
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
+    image: kpi-backend:latest
     ports:
       - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - kpi-net
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+    image: kpi-frontend:latest
     ports:
       - "8501:8501"
+    restart: unless-stopped
+    environment:
+      BACKEND_URL: http://backend:8000
     depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app/frontend
+      backend:
+        condition: service_healthy
+    networks:
+      - kpi-net
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8501/_stcore/health').status==200 else 1)"
+      interval: 15s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+
+networks:
+  kpi-net:
+    driver: bridge

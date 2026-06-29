@@ -1,0 +1,24 @@
+# Keep the build context small and reproducible.
+.git
+.github
+.vscode
+.venv
+venv
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+junit.xml
+tests/
+scripts/
+*.bat
+*.md
+.env
+.env.example
+docker-compose*.yml
+Dockerfile.*
+.pre-commit-config.yaml
