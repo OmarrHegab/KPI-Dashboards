@@ -104,7 +104,7 @@ jobs:
       # base-image CVEs are outside our code's control and are remediated by the
       # Dependabot docker updates. Flip exit-code to "1" to harden into a gate.
       - name: Scan backend image (Trivy)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: kpi-backend:latest
           severity: HIGH,CRITICAL
@@ -112,7 +112,7 @@ jobs:
           exit-code: "0"
 
       - name: Scan frontend image (Trivy)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: kpi-frontend:latest
           severity: HIGH,CRITICAL
@@ -155,7 +155,7 @@ jobs:
       # Report-only (exit-code 0): a single upstream advisory on a pinned dep
       # shouldn't turn the build red; Dependabot drives remediation instead.
       - name: Trivy filesystem scan (dependencies & secrets)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -164,7 +164,7 @@ jobs:
           exit-code: "0"
 
       - name: Trivy config scan (Dockerfile & compose misconfig)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: config
           scan-ref: .
