@@ -291,17 +291,25 @@ def render_location_chart(devices: pd.DataFrame) -> None:
 def render_trend_chart(trends: list[dict]) -> None:
     if not trends:
         return
+
     with st.container(border=True):
         trend_df = pd.DataFrame(trends)
+
         fig = px.line(
             trend_df,
             x="date",
-            y=["pass_rate", "pipeline_success_rate"],
-            title="Pass Rate & Pipeline Success Over Time",
+            y="pipeline_success_rate",
+            title="Pipeline Success Rate Over Time",
             template=PLOTLY_TEMPLATE,
             markers=True,
         )
-        fig.update_layout(yaxis_title="%", xaxis_title=None)
+
+        fig.update_layout(
+            yaxis_title="%",
+            xaxis_title=None,
+            showlegend=False,
+        )
+
         st.plotly_chart(style_chart(fig), use_container_width=True)
 
 
