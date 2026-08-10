@@ -1,6 +1,6 @@
 # Pinned to a patch version for reproducibility. For production, pin by digest
 # (FROM python:3.11.9-slim@sha256:...) and let Dependabot keep it fresh.
-FROM python:3.11.9-slim
+FROM python:3.14.0-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
